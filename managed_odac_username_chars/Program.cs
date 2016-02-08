@@ -132,7 +132,7 @@ namespace managed_odac_username_chars
 		}
 
 		private const string ProblematicUsername = @"ZAŻÓŁĆGĘŚLĄJAŹŃ";
-		private const string ProblematicUserPass = @"test";
+		private const string ProblematicUserPass = @"TEST";
 
 		static void Main(string[] args)
 		{
