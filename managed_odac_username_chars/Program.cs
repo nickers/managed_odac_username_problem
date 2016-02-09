@@ -77,8 +77,9 @@ namespace managed_odac_username_chars
 		{
 			var debug = new Dictionary<string, string>
 			{
-				{ "NLS_DATABASE_PARAMETERS",  "SELECT parameter, value FROM NLS_DATABASE_PARAMETERS order by parameter asc"},
+				{ "NLS_DATABASE_PARAMETERS",  "SELECT parameter, value FROM NLS_DATABASE_PARAMETERS where parameter in ('NLS_LANGUAGE', 'NLS_TERRITORY', 'NLS_CHARACTERSET', 'NLS_NCHAR_CHARACTERSET', 'NLS_RDBMS_VERSION') order by parameter asc"},
 				{ "V$VERSION",  "SELECT banner, ' ' FROM V$VERSION order by banner asc"},
+				{ "V$PARAMETER", "select name,value from v$parameter where upper(name)=upper('SEC_CASE_SENSITIVE_LOGON')" }
 			};
 			foreach (var e in debug)
 			{
@@ -114,7 +115,17 @@ namespace managed_odac_username_chars
 				}
 				catch (OracleException e)
 				{
-					Console.WriteLine("Exception on TryConnect() = {0}", e.Message);
+					Console.WriteLine("{0} was caught\n  HResult={1}\n  Source={2}\n  ErrorCode={3}\n  DataSource={4}\n  Number={5}\n  Procedure={6}\n  StackTrace={7}\n  InnerException: {8}",
+						e.GetType(),
+						e.HResult,
+						e.Source ?? "",
+						e.ErrorCode,
+						e.DataSource ?? "",
+						e.Number,
+						e.Procedure ?? "",
+						e.StackTrace,
+						e.InnerException
+						);
 					return false;
 				}
 				var si = con.GetSessionInfo();
